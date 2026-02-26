@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="BLL/BLL.csproj" />
+  <Project Path="Contracts/Contracts.csproj" />
+  <Project Path="Entities/Entities.csproj" />
+  <Project Path="Initialization/Initialization.csproj" />
+  <Project Path="Persistence.Postgres/Persistence.Postgres.csproj" />
+  <Project Path="PL/PL.csproj" />
+  <Project Path="Primitives/Primitives.csproj" />
+  <Project Path="Services/Services.csproj" />
+</Solution>
