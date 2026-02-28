@@ -1,4 +1,4 @@
-﻿namespace Entities;
+﻿namespace Entities.Entities;
 
 public class Organization
 {

@@ -1,36 +1,63 @@
-﻿using Entities;
+﻿using BLL.Services;
+using Contracts.Dtos;
+using Entities.Entities;
+using Microsoft.EntityFrameworkCore;
+using Primitives.Enums;
 
 namespace Persistence.Postgres.Repositories;
 
-public class KeyRepository :IKeyRepository
+public class KeyRepository : IKeyRepository
 {
-    public Task Add(Key key)
+    private readonly AppDbContext _context;
+
+    public KeyRepository(AppDbContext context)
     {
-        throw new NotImplementedException();
+        _context = context;
     }
 
-    public Task Update(Key key)
+    public async Task<long> Create(Key key)
     {
-        throw new NotImplementedException();
+        _context.Keys.Add(key);
+        await _context.SaveChangesAsync();
+        _context.Entry(key).State = EntityState.Detached;
+
+        return key.Id;
     }
 
-    public Task Delete(long id)
+    public async Task Update(Key key)
     {
-        throw new NotImplementedException();
+        _context.Keys.Update(key);
+        await _context.SaveChangesAsync();
+        _context.Entry(key).State = EntityState.Detached;
     }
 
-    public Task<Key> GetById(long id)
+    public async Task Delete(long id)
     {
-        throw new NotImplementedException();
+        await _context.Keys
+            .Where(x => x.Id == id)
+            .ExecuteDeleteAsync();
     }
 
-    public Task<List<Key>> GetByOrganizationId(long id)
+    public async Task<Key> GetById(long id)
     {
-        throw new NotImplementedException();
+        var key = await _context.Keys
+            .AsNoTracking()
+            .Include(x => x.Organization)
+            .FirstOrDefaultAsync(k => k.Id == id);
+
+        if (key is null)
+        {
+            throw new Exception($"Ключ с id {id} не найден");
+        }
+
+        return key;
     }
 
-    public Task<List<Key>> GetAll()
+    public async Task<List<Key>> GetAll()
     {
-        throw new NotImplementedException();
+        return await _context.Keys
+            .AsNoTracking()
+            .Include(x => x.Organization)
+            .ToListAsync();
     }
 }

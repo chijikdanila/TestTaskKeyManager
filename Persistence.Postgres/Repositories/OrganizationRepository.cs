@@ -1,4 +1,7 @@
-﻿using Entities;
+﻿using BLL.Services;
+using Entities;
+using Entities.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Postgres.Repositories;
 
@@ -11,28 +14,55 @@ public class OrganizationRepository : IOrganizationRepository
         _context = context;
     }
     
-    public Task Add(Organization organization)
+    public async Task<long> Create(Organization organization)
     {
-        throw new NotImplementedException();
+        _context.Add(organization);
+        await _context.SaveChangesAsync();
+        _context.Entry(organization).State = EntityState.Detached;
+        
+        return organization.Id;
     }
 
-    public Task Update(Organization organization)
+    public async Task Update(Organization organization)
     {
-        throw new NotImplementedException();
+        _context.Update(organization);
+        await _context.SaveChangesAsync();
+        _context.Entry(organization).State = EntityState.Detached;
     }
 
-    public Task Delete(long id)
+    public async Task Delete(long id)
     {
-        throw new NotImplementedException();
+        await _context.Organizations
+            .Where(o => o.Id == id)
+            .ExecuteDeleteAsync();
     }
 
-    public Task<Organization> GetById(long id)
+    public async Task<Organization> GetById(long id)
     {
-        throw new NotImplementedException();
+        var organization = await _context.Organizations
+            .AsNoTracking()
+            .FirstOrDefaultAsync(o => o.Id == id);
+
+        if (organization is null)
+        {
+            throw new Exception($"Орагнизация с id {id} не найдена");
+        }
+
+        return organization;
     }
 
-    public Task<List<Organization>> GetAll()
+    public async Task<List<Organization>> GetAll()
     {
-        throw new NotImplementedException();
+        return await _context.Organizations
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+    public async Task<List<Organization>> GetAllWithKeys()
+    {
+        return await _context.Organizations
+            .AsNoTracking()
+            .Include(x => x.KeysInfo)
+            .ToListAsync();
     }
 }
