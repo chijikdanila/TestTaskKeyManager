@@ -1,11 +1,11 @@
 <Solution>
-  <Project Path="BLL/BLL.csproj" />
-  <Project Path="Contracts/Contracts.csproj" />
-  <Project Path="Entities/Entities.csproj" />
-  <Project Path="Initialization/Initialization.csproj" />
-  <Project Path="Persistence.Postgres/Persistence.Postgres.csproj" />
-  <Project Path="PL/PL.csproj" />
-  <Project Path="Primitives/Primitives.csproj" />
-  <Project Path="Services/Services.csproj" />
-  <Project Path="Utilities/Utilities.csproj" />
+  <Project Path="TestTask.BLL/TestTask.BLL.csproj" />
+  <Project Path="TestTask.Contracts/TestTask.Contracts.csproj" />
+  <Project Path="TestTask.Entities/TestTask.Entities.csproj" />
+  <Project Path="TestTask.Initialization/TestTask.Initialization.csproj" />
+  <Project Path="TestTask.Persistence.Postgres/TestTask.Persistence.Postgres.csproj" />
+  <Project Path="TestTask.PL/TestTask.PL.csproj" />
+  <Project Path="TestTask.Primitives/TestTask.Primitives.csproj" />
+  <Project Path="TestTask.Services/TestTask.Services.csproj" />
+  <Project Path="TestTask.Utilities/TestTask.Utilities.csproj" />
 </Solution>

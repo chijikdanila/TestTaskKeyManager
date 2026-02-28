@@ -1,0 +1,299 @@
+﻿<UserControl x:Class="TestTask.PL.Views.UserControls.KeysTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:userControls="clr-namespace:TestTask.PL.ViewModels.UserControls"
+             xmlns:models="clr-namespace:TestTask.Contracts.Dtos;assembly=TestTask.Contracts"
+             xmlns:converters="clr-namespace:TestTask.PL.Converters"
+             d:DataContext="{d:DesignInstance userControls:KeysTabVM}"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="1000">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="AccentColor" Color="#3788FF" />
+        <SolidColorBrush x:Key="DeleteColor" Color="#CF6679" />
+        <SolidColorBrush x:Key="BorderColor" Color="#333333" />
+        <SolidColorBrush x:Key="ControlBackground" Color="#1E1E1E" />
+        <SolidColorBrush x:Key="TextForeground" Color="#E1E1E1" />
+        <SolidColorBrush x:Key="RowHoverColor" Color="#2D2D2D" />
+
+        <converters:KeyStatusToMessageConverter x:Key="KeyBlockStatusToMessage" />
+        <converters:OrganizationToNameConverter x:Key="OrganizationToName" />
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Background" Value="{StaticResource ControlBackground}" />
+            <Setter Property="Foreground" Value="{StaticResource TextForeground}" />
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="10,5" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton x:Name="ToggleButton" 
+                                          BorderBrush="{TemplateBinding BorderBrush}" 
+                                          Background="{TemplateBinding Background}"
+                                          Foreground="{TemplateBinding Foreground}"
+                                          Grid.Column="2" 
+                                          Focusable="false"
+                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                          ClickMode="Press">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border x:Name="Border" 
+                                                CornerRadius="4" 
+                                                Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="1">
+                                            <Path x:Name="Arrow"
+                                                  Fill="{StaticResource TextForeground}"
+                                                  HorizontalAlignment="Right"
+                                                  VerticalAlignment="Center"
+                                                  Margin="0,0,10,0"
+                                                  Data="M0,0 L4,4 L8,0 Z" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="Border" Property="Background" Value="#2D2D2D" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+                            <ContentPresenter x:Name="ContentSite"
+                                              IsHitTestVisible="False" 
+                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                              Margin="10,3,30,3"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Left" />
+                            <Popup x:Name="Popup"
+                                   Placement="Bottom"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   AllowsTransparency="True" 
+                                   Focusable="False"
+                                   PopupAnimation="Slide">
+                                <Grid x:Name="DropDown"
+                                      SnapsToDevicePixels="True"                
+                                      MinWidth="{TemplateBinding ActualWidth}"
+                                      MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border x:Name="DropDownBorder"
+                                            Background="{StaticResource ControlBackground}"
+                                            BorderThickness="1"
+                                            BorderBrush="{StaticResource BorderColor}"
+                                            CornerRadius="0,0,4,4"/>
+                                    <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                    </ScrollViewer>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Foreground" Value="{StaticResource TextForeground}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource RowHoverColor}"/>
+                            </Trigger>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource AccentColor}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource AccentColor}" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Padding" Value="15,8" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.85" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernDataGrid" TargetType="DataGrid">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="GridLinesVisibility" Value="None" />
+            <Setter Property="RowHeight" Value="45" />
+            <Setter Property="CanUserAddRows" Value="False" />
+            <Setter Property="ColumnHeaderStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Foreground" Value="#888888" />
+                        <Setter Property="Padding" Value="10" />
+                        <Setter Property="BorderThickness" Value="0,0,0,1" />
+                        <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{StaticResource TextForeground}" />
+            <Setter Property="Margin" Value="0,2" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridRow">
+                        <Border x:Name="DGR_Border" BorderBrush="Transparent" BorderThickness="1" Background="{TemplateBinding Background}" CornerRadius="4">
+                            <DataGridCellsPresenter ItemsPanel="{TemplateBinding ItemsPanel}" SnapsToDevicePixels="True" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="DGR_Border" Property="Background" Value="{StaticResource RowHoverColor}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="DGR_Border" Property="Background" Value="#25354A" />
+                                <Setter TargetName="DGR_Border" Property="BorderBrush" Value="{StaticResource AccentColor}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="DataGridCell">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Background="Transparent" Padding="10,0">
+                            <ContentPresenter VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="25">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,25">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="220" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Border BorderBrush="{StaticResource BorderColor}" BorderThickness="1" CornerRadius="4" Background="{StaticResource ControlBackground}">
+                <Grid>
+                    <TextBox x:Name="SearchBox"
+                             Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}"
+                             Background="Transparent"
+                             Foreground="{StaticResource TextForeground}"
+                             CaretBrush="White"
+                             BorderThickness="0"
+                             Padding="12,10"
+                             VerticalContentAlignment="Center" />
+                    <TextBlock IsHitTestVisible="False"
+                               Text="🔍 Поиск..."
+                               Foreground="#555555"
+                               VerticalAlignment="Center"
+                               Margin="15,0">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=SearchBox}" Value="">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Grid>
+            </Border>
+
+            <ComboBox Grid.Column="1" 
+                      Margin="15,0"
+                      ItemsSource="{Binding Organizations}"
+                      SelectedItem="{Binding SelectedOrganization}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource OrganizationToName}}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <Button Grid.Column="2"
+                    Content="Добавить"
+                    Style="{StaticResource ModernButton}"
+                    MinWidth="140"
+                    Command="{Binding OpenSaveKeyWindowCommand}" />
+        </Grid>
+
+        <DataGrid Grid.Row="1"
+                  Style="{StaticResource ModernDataGrid}"
+                  HorizontalScrollBarVisibility="Disabled"
+                  ItemsSource="{Binding FilteredKeys}"
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ОРГАНИЗАЦИЯ" Binding="{Binding OrganizationName}" Width="1.5*" />
+                <DataGridTextColumn Header="КЛЮЧ" Binding="{Binding KeyValue}" Width="2*" />
+                <DataGridTextColumn Header="АКТИВАЦИЯ" Binding="{Binding StartedAt, StringFormat=\{0:dd.MM.yyyy\}}" Width="1*" />
+                <DataGridTextColumn Header="ОКОНЧАНИЕ" Binding="{Binding EndedAt, StringFormat=\{0:dd.MM.yyyy\}}" Width="1*" />
+                <DataGridTextColumn Header="СТАТУС" Binding="{Binding KeyStatus, Converter={StaticResource KeyBlockStatusToMessage}}" Width="1*" />
+
+                <DataGridTemplateColumn Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Content="Изменить"
+                                        Style="{StaticResource ModernButton}"
+                                        Background="#333333"
+                                        Margin="5,0"
+                                        FontSize="11"
+                                        Padding="8,4"
+                                        Command="{Binding DataContext.OpenSaveKeyWindowCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}" />
+                                <Button Content="Удалить"
+                                        Style="{StaticResource ModernButton}"
+                                        Background="{StaticResource DeleteColor}"
+                                        Margin="5,0"
+                                        FontSize="11"
+                                        Padding="8,4"
+                                        Command="{Binding DataContext.DeleteKeyCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

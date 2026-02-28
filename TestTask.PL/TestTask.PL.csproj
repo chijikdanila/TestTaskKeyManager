@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TestTask.BLL\TestTask.BLL.csproj" />
+      <ProjectReference Include="..\TestTask.Contracts\TestTask.Contracts.csproj" />
+      <ProjectReference Include="..\TestTask.Utilities\TestTask.Utilities.csproj" />
+    </ItemGroup>
+
+</Project>

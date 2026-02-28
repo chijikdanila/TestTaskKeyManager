@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net10.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UseWPF>true</UseWPF>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TestTask.BLL\TestTask.BLL.csproj" />
+      <ProjectReference Include="..\TestTask.Contracts\TestTask.Contracts.csproj" />
+      <ProjectReference Include="..\TestTask.Entities\TestTask.Entities.csproj" />
+      <ProjectReference Include="..\TestTask.Persistence.Postgres\TestTask.Persistence.Postgres.csproj" />
+      <ProjectReference Include="..\TestTask.PL\TestTask.PL.csproj" />
+      <ProjectReference Include="..\TestTask.Primitives\TestTask.Primitives.csproj" />
+      <ProjectReference Include="..\TestTask.Services\TestTask.Services.csproj" />
+      <ProjectReference Include="..\TestTask.Utilities\TestTask.Utilities.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.3">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.3" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.3" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.3" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.3" />
+      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="appsettings.json" />
+      <Content Include="appsettings.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+</Project>
